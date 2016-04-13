@@ -1,0 +1,5 @@
+﻿@model Models1.Models.Genre
+
+<div class="col-md-10">
+    @Html.DropDownListFor(m => m.Genres, (IEnumerable<SelectListItem>) ViewBag.Genres, new { })
+</div>

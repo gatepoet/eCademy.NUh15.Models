@@ -17,7 +17,7 @@ namespace Models1.Controllers
         // GET: Movies
         public ActionResult Index()
         {
-            return View(db.Movies.ToList());
+            return View(db.Movies.Include(m => m.Genre).ToList());
         }
 
         // GET: Movies/Details/5
@@ -27,7 +27,9 @@ namespace Models1.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Movie movie = db.Movies.Find(id);
+            Movie movie = db.Movies
+                .Include(m => m.Genre)
+                .Single(m => m.Id == id);
             if (movie == null)
             {
                 return HttpNotFound();
@@ -38,7 +40,19 @@ namespace Models1.Controllers
         // GET: Movies/Create
         public ActionResult Create()
         {
-            return View();
+            var genres = db.Genre
+                .Select(g => new SelectListItem
+                {
+                    Text = g.Name,
+                    Value = g.Id.ToString()
+                })
+                .ToList();
+            var viewModel = new CreateOrEditMovieViewModel
+            {
+                Genres = genres
+            };
+
+            return View(viewModel);
         }
 
         // POST: Movies/Create
@@ -46,16 +60,18 @@ namespace Models1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Title,ReleaseDate,Genre,Price")] Movie movie)
+        public ActionResult Create(CreateOrEditMovieViewModel model)
         {
             if (ModelState.IsValid)
             {
-                db.Movies.Add(movie);
+                var genre = db.Genre.Find(model.GenreId);
+                model.Movie.Genre = genre;
+                db.Movies.Add(model.Movie);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(movie);
+            return View(model);
         }
 
         // GET: Movies/Edit/5
@@ -70,7 +86,25 @@ namespace Models1.Controllers
             {
                 return HttpNotFound();
             }
-            return View(movie);
+            var genres = db.Genre
+                .Select(g => new SelectListItem
+                {
+                    Text = g.Name,
+                    Value = g.Id.ToString()
+                })
+                .ToList();
+            int genreId = 0;
+            if (movie.Genre != null)
+            {
+                genreId = movie.Genre.Id;
+            }
+            var viewModel = new CreateOrEditMovieViewModel
+            {
+                Genres = genres,
+                Movie = movie,
+                GenreId = genreId
+            };
+            return View(viewModel);
         }
 
         // POST: Movies/Edit/5
@@ -78,15 +112,15 @@ namespace Models1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,ReleaseDate,Genre,Price")] Movie movie)
+        public ActionResult Edit(CreateOrEditMovieViewModel model)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(movie).State = EntityState.Modified;
+                db.Entry(model.Movie).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(movie);
+            return View(model);
         }
 
         // GET: Movies/Delete/5

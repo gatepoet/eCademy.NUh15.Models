@@ -182,11 +182,16 @@
     <Compile Include="Migrations\201604061952170_MovieTitleLengthValidation.Designer.cs">
       <DependentUpon>201604061952170_MovieTitleLengthValidation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604131857278_Add Genre.cs" />
+    <Compile Include="Migrations\201604131857278_Add Genre.Designer.cs">
+      <DependentUpon>201604131857278_Add Genre.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Movie.cs" />
+    <Compile Include="Models\MovieViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -250,6 +255,8 @@
     <Content Include="Views\Movies\Details.cshtml" />
     <Content Include="Views\Movies\Edit.cshtml" />
     <Content Include="Views\Movies\Index.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Genre.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Genre.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -268,6 +275,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604061952170_MovieTitleLengthValidation.resx">
       <DependentUpon>201604061952170_MovieTitleLengthValidation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604131857278_Add Genre.resx">
+      <DependentUpon>201604131857278_Add Genre.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
